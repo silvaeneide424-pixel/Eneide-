@@ -1,0 +1,143 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Perfil profissional multi-tenant do usuário autenticado via Google no Vegan Flow.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "UID do usuário no Firebase Auth." },
+        "nome": { "type": "string", "description": "Nome completo exibido do profissional ou gestor." },
+        "email": { "type": "string", "description": "E-mail autenticado pelo Google." },
+        "cargo": { "type": "string", "description": "Especialidade ou função no sistema." },
+        "crnOuRegistro": { "type": "string", "description": "Registro profissional (CRN) ou identificação." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp de criação." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp de atualização." }
+      },
+      "required": ["userId", "nome", "email", "cargo", "crnOuRegistro", "createdAt", "updatedAt"]
+    },
+    "Produto": {
+      "title": "Produto",
+      "description": "Suplemento vegano pertencente ao catálogo isolado do usuário (tenant).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Identificador único do produto." },
+        "userId": { "type": "string", "description": "UID do proprietário (tenant)." },
+        "nome": { "type": "string", "description": "Nome comercial do suplemento." },
+        "categoria": { "type": "string", "description": "Categoria do suplemento." },
+        "descricaoCurta": { "type": "string", "description": "Resumo comercial." },
+        "descricaoCompleta": { "type": "string", "description": "Descrição técnica detalhada." },
+        "preco": { "type": "number", "description": "Preço unitário em R$." },
+        "estoqueSimulado": { "type": "integer", "description": "Quantidade em estoque." },
+        "unidade": { "type": "string", "description": "Apresentação da embalagem." },
+        "ingredientes": { "type": "array", "description": "Lista de ingredientes." },
+        "beneficios": { "type": "array", "description": "Lista de benefícios clínicos." },
+        "alergenicos": { "type": "array", "description": "Lista de alergênicos." },
+        "indicacaoUso": { "type": "string", "description": "Indicação clínica." },
+        "modoUso": { "type": "string", "description": "Modo de preparo e consumo." },
+        "composicao": { "type": "string", "description": "Composição técnica." },
+        "porcaoReferencia": { "type": "string", "description": "Porção da tabela nutricional." },
+        "tabelaNutricional": { "type": "array", "description": "Itens da tabela nutricional." },
+        "restricoes": { "type": "array", "description": "Lista de restrições." },
+        "perguntasFrequentes": { "type": "array", "description": "Perguntas e respostas frequentes." },
+        "seloDestaque": { "type": "string", "description": "Selo de destaque comercial." },
+        "statusDisponibilidade": { "type": "string", "description": "Status calculado do estoque." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp de criação." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp de atualização." }
+      },
+      "required": ["id", "userId", "nome", "categoria", "descricaoCurta", "descricaoCompleta", "preco", "estoqueSimulado", "unidade", "ingredientes", "beneficios", "alergenicos", "indicacaoUso", "modoUso", "composicao", "porcaoReferencia", "tabelaNutricional", "restricoes", "perguntasFrequentes", "seloDestaque", "statusDisponibilidade", "createdAt", "updatedAt"]
+    },
+    "Cliente": {
+      "title": "Cliente",
+      "description": "Paciente ou cliente cadastrado no CRM isolado do usuário (tenant).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Identificador único do cliente." },
+        "userId": { "type": "string", "description": "UID do proprietário (tenant)." },
+        "nomeCompleto": { "type": "string", "description": "Nome completo do cliente." },
+        "telefone": { "type": "string", "description": "Telefone ou WhatsApp." },
+        "email": { "type": "string", "description": "E-mail do cliente." },
+        "cidadeLocalizacao": { "type": "string", "description": "Cidade e UF." },
+        "preferenciasAlimentares": { "type": "array", "description": "Preferências alimentares." },
+        "objetivos": { "type": "array", "description": "Objetivos clínicos." },
+        "restricoes": { "type": "array", "description": "Restrições alimentares." },
+        "alergias": { "type": "array", "description": "Alergias." },
+        "observacoes": { "type": "string", "description": "Observações clínicas." },
+        "dataCadastro": { "type": "string", "description": "Data de cadastro formatada." },
+        "historicoInteracoes": { "type": "array", "description": "Histórico de atendimentos." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp de criação." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp de atualização." }
+      },
+      "required": ["id", "userId", "nomeCompleto", "telefone", "email", "cidadeLocalizacao", "preferenciasAlimentares", "objetivos", "restricoes", "alergias", "observacoes", "dataCadastro", "historicoInteracoes", "createdAt", "updatedAt"]
+    },
+    "Pedido": {
+      "title": "Pedido",
+      "description": "Pedido de venda de suplementos registrado no tenant do usuário.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Identificador único do pedido." },
+        "userId": { "type": "string", "description": "UID do proprietário (tenant)." },
+        "codigoPedido": { "type": "string", "description": "Código amigável do pedido." },
+        "clienteId": { "type": "string", "description": "ID do cliente associado." },
+        "nomeCliente": { "type": "string", "description": "Nome do cliente associado." },
+        "itens": { "type": "array", "description": "Itens do pedido." },
+        "subtotal": { "type": "number", "description": "Subtotal em R$." },
+        "desconto": { "type": "number", "description": "Desconto em R$." },
+        "total": { "type": "number", "description": "Valor total em R$." },
+        "status": { "type": "string", "description": "Status logístico do pedido." },
+        "metodoPagamento": { "type": "string", "description": "Forma de pagamento." },
+        "dataCriacao": { "type": "string", "description": "Data do pedido." },
+        "observacoes": { "type": "string", "description": "Observações do pedido." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp de criação." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp de atualização." }
+      },
+      "required": ["id", "userId", "codigoPedido", "clienteId", "nomeCliente", "itens", "subtotal", "desconto", "total", "status", "metodoPagamento", "dataCriacao", "observacoes", "createdAt", "updatedAt"]
+    },
+    "PlanoAlimentar": {
+      "title": "PlanoAlimentar",
+      "description": "Plano alimentar personalizado e protocolo de suplementos associado ao cliente do usuário.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Identificador único do plano." },
+        "userId": { "type": "string", "description": "UID do proprietário (tenant)." },
+        "clienteId": { "type": "string", "description": "ID do cliente associado." },
+        "nomeCliente": { "type": "string", "description": "Nome do cliente associado." },
+        "titulo": { "type": "string", "description": "Título do protocolo nutricional." },
+        "objetivoPrincipal": { "type": "string", "description": "Objetivo clínico principal." },
+        "caloriasDiarias": { "type": "integer", "description": "Meta calórica diária." },
+        "proteinasGramas": { "type": "integer", "description": "Meta proteica em gramas." },
+        "carboidratosGramas": { "type": "integer", "description": "Meta de carboidratos em gramas." },
+        "gordurasGramas": { "type": "integer", "description": "Meta lipídica em gramas." },
+        "refeicoes": { "type": "array", "description": "Lista de refeições estruturadas." },
+        "suplementosSugeridos": { "type": "array", "description": "Lista de suplementos veganos vinculados." },
+        "orientacoesGerais": { "type": "string", "description": "Orientações clínicas gerais." },
+        "dataCriacao": { "type": "string", "description": "Data de criação do plano." },
+        "ativo": { "type": "boolean", "description": "Status de vigência do plano." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp de criação." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp de atualização." }
+      },
+      "required": ["id", "userId", "clienteId", "nomeCliente", "titulo", "objetivoPrincipal", "caloriasDiarias", "proteinasGramas", "carboidratosGramas", "gordurasGramas", "refeicoes", "suplementosSugeridos", "orientacoesGerais", "dataCriacao", "ativo", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Documento de perfil do usuário autenticado (tenant root)."
+    },
+    "/users/{userId}/produtos/{produtoId}": {
+      "schema": { "$ref": "#/entities/Produto" },
+      "description": "Catálogo de suplementos veganos isolado por usuário."
+    },
+    "/users/{userId}/clientes/{clienteId}": {
+      "schema": { "$ref": "#/entities/Cliente" },
+      "description": "Carteira de clientes CRM e prontuários isolados por usuário."
+    },
+    "/users/{userId}/pedidos/{pedidoId}": {
+      "schema": { "$ref": "#/entities/Pedido" },
+      "description": "Histórico de vendas e pedidos isolado por usuário."
+    },
+    "/users/{userId}/planos/{planoId}": {
+      "schema": { "$ref": "#/entities/PlanoAlimentar" },
+      "description": "Planos alimentares personalizados isolados por usuário."
+    }
+  }
+}

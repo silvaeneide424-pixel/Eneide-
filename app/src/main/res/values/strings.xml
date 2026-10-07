@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Vegan Flow</string>
+    <string name="subtitulo_saas">Gestão de Suplementos Veganos, CRM &amp; Nutrição</string>
+    <string name="aba_painel">Painel</string>
+    <string name="aba_produtos">Produtos</string>
+    <string name="aba_clientes">Clientes</string>
+    <string name="aba_pedidos">Pedidos</string>
+    <string name="aba_planos">Planos</string>
+    <string name="acao_novo_produto">Novo Produto</string>
+    <string name="acao_novo_cliente">Novo Cliente</string>
+    <string name="acao_novo_pedido">Registrar Venda</string>
+    <string name="acao_novo_plano">Criar Plano</string>
+    <string name="acao_restaurar_dados">Restaurar Demo</string>
+    <string name="confirmar_exclusao_titulo">Confirmar Exclusão</string>
+    <string name="confirmar_edicao_titulo">Confirmar Alterações</string>
+    <string name="botao_cancelar">Cancelar</string>
+    <string name="botao_confirmar">Confirmar</string>
+    <string name="botao_salvar">Salvar</string>
+    <string name="botao_fechar">Fechar</string>
+    <string name="estado_vazio_produtos">🌱 Nenhum suplemento encontrado para este filtro</string>
+    <string name="estado_vazio_clientes">👥 Nenhum cliente encontrado na base</string>
+    <string name="estado_vazio_pedidos">🛒 Nenhum pedido registrado neste filtro</string>
+    <string name="estado_vazio_planos">🥗 Nenhum plano alimentar cadastrado ainda</string>
+    <string name="erro_campos_obrigatorios">Preencha todos os campos obrigatórios corretamente.</string>
+</resources>

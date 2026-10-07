@@ -1,0 +1,240 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidTimestamp(ts) {
+      return ts is timestamp && ts <= request.time;
+    }
+
+    function isValidStringList(arr, maxLen) {
+      return arr is list && arr.size() <= maxLen && (arr.size() == 0 || arr[0] is string);
+    }
+
+    function isValidMapList(arr, maxLen) {
+      return arr is list && arr.size() <= maxLen && (arr.size() == 0 || arr[0] is map);
+    }
+
+    function isValidUserProfile(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.nome is string && data.nome.size() >= 2 && data.nome.size() <= 120 &&
+             data.email is string && data.email.size() >= 3 && data.email.size() <= 180 &&
+             data.cargo is string && data.cargo.size() >= 2 && data.cargo.size() <= 120 &&
+             data.crnOuRegistro is string && data.crnOuRegistro.size() >= 1 && data.crnOuRegistro.size() <= 60 &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidProduto(data) {
+      return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
+             data.userId is string && data.userId == request.auth.uid &&
+             data.nome is string && data.nome.size() >= 2 && data.nome.size() <= 160 &&
+             data.categoria is string && data.categoria.size() >= 2 && data.categoria.size() <= 80 &&
+             data.descricaoCurta is string && data.descricaoCurta.size() >= 2 && data.descricaoCurta.size() <= 500 &&
+             data.descricaoCompleta is string && data.descricaoCompleta.size() >= 2 && data.descricaoCompleta.size() <= 2000 &&
+             (data.preco is int || data.preco is float) && data.preco >= 0 && data.preco <= 100000 &&
+             data.estoqueSimulado is int && data.estoqueSimulado >= 0 && data.estoqueSimulado <= 100000 &&
+             data.unidade is string && data.unidade.size() >= 1 && data.unidade.size() <= 80 &&
+             isValidStringList(data.ingredientes, 30) &&
+             isValidStringList(data.beneficios, 30) &&
+             isValidStringList(data.alergenicos, 20) &&
+             data.indicacaoUso is string && data.indicacaoUso.size() <= 600 &&
+             data.modoUso is string && data.modoUso.size() <= 600 &&
+             data.composicao is string && data.composicao.size() <= 600 &&
+             data.porcaoReferencia is string && data.porcaoReferencia.size() <= 100 &&
+             isValidMapList(data.tabelaNutricional, 30) &&
+             isValidStringList(data.restricoes, 20) &&
+             isValidMapList(data.perguntasFrequentes, 20) &&
+             data.seloDestaque is string && data.seloDestaque.size() <= 100 &&
+             data.statusDisponibilidade is string && data.statusDisponibilidade.size() <= 60 &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidCliente(data) {
+      return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
+             data.userId is string && data.userId == request.auth.uid &&
+             data.nomeCompleto is string && data.nomeCompleto.size() >= 2 && data.nomeCompleto.size() <= 160 &&
+             data.telefone is string && data.telefone.size() >= 6 && data.telefone.size() <= 40 &&
+             data.email is string && data.email.size() >= 3 && data.email.size() <= 180 &&
+             data.cidadeLocalizacao is string && data.cidadeLocalizacao.size() >= 2 && data.cidadeLocalizacao.size() <= 120 &&
+             isValidStringList(data.preferenciasAlimentares, 20) &&
+             isValidStringList(data.objetivos, 20) &&
+             isValidStringList(data.restricoes, 20) &&
+             isValidStringList(data.alergias, 20) &&
+             data.observacoes is string && data.observacoes.size() <= 2000 &&
+             data.dataCadastro is string && data.dataCadastro.size() <= 40 &&
+             isValidMapList(data.historicoInteracoes, 50) &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidPedido(data) {
+      return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
+             data.userId is string && data.userId == request.auth.uid &&
+             data.codigoPedido is string && data.codigoPedido.size() >= 2 && data.codigoPedido.size() <= 60 &&
+             data.clienteId is string && data.clienteId.size() >= 1 && data.clienteId.size() <= 128 &&
+             data.nomeCliente is string && data.nomeCliente.size() >= 2 && data.nomeCliente.size() <= 160 &&
+             isValidMapList(data.itens, 30) && data.itens.size() >= 1 &&
+             (data.subtotal is int || data.subtotal is float) && data.subtotal >= 0 &&
+             (data.desconto is int || data.desconto is float) && data.desconto >= 0 &&
+             (data.total is int || data.total is float) && data.total >= 0 &&
+             data.status is string && data.status.size() >= 2 && data.status.size() <= 60 &&
+             data.metodoPagamento is string && data.metodoPagamento.size() >= 2 && data.metodoPagamento.size() <= 80 &&
+             data.dataCriacao is string && data.dataCriacao.size() <= 40 &&
+             data.observacoes is string && data.observacoes.size() <= 1000 &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    function isValidPlano(data) {
+      return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
+             data.userId is string && data.userId == request.auth.uid &&
+             data.clienteId is string && data.clienteId.size() >= 1 && data.clienteId.size() <= 128 &&
+             data.nomeCliente is string && data.nomeCliente.size() >= 2 && data.nomeCliente.size() <= 160 &&
+             data.titulo is string && data.titulo.size() >= 2 && data.titulo.size() <= 160 &&
+             data.objetivoPrincipal is string && data.objetivoPrincipal.size() >= 2 && data.objetivoPrincipal.size() <= 300 &&
+             data.caloriasDiarias is int && data.caloriasDiarias >= 0 && data.caloriasDiarias <= 15000 &&
+             data.proteinasGramas is int && data.proteinasGramas >= 0 && data.proteinasGramas <= 1000 &&
+             data.carboidratosGramas is int && data.carboidratosGramas >= 0 && data.carboidratosGramas <= 2000 &&
+             data.gordurasGramas is int && data.gordurasGramas >= 0 && data.gordurasGramas <= 1000 &&
+             isValidMapList(data.refeicoes, 15) &&
+             isValidMapList(data.suplementosSugeridos, 20) &&
+             data.orientacoesGerais is string && data.orientacoesGerais.size() <= 2000 &&
+             data.dataCriacao is string && data.dataCriacao.size() <= 40 &&
+             data.ativo is bool &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId) && (resource == null || existing().userId == request.auth.uid);
+      allow list: if isOwner(userId) && existing().userId == request.auth.uid;
+
+      allow create: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       incoming().keys().hasAll(['userId', 'nome', 'email', 'cargo', 'crnOuRegistro', 'createdAt', 'updatedAt']) &&
+                       incoming().keys().hasOnly(['userId', 'nome', 'email', 'cargo', 'crnOuRegistro', 'createdAt', 'updatedAt']) &&
+                       isValidUserProfile(incoming());
+
+      allow update: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       isValidUserProfile(incoming()) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['nome', 'email', 'cargo', 'crnOuRegistro', 'updatedAt']);
+
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      match /produtos/{produtoId} {
+        allow get: if isOwner(userId) && isValidId(produtoId) && (resource == null || existing().userId == request.auth.uid);
+        allow list: if isOwner(userId) && existing().userId == request.auth.uid;
+
+        allow create: if isOwner(userId) &&
+                         isValidId(produtoId) &&
+                         incoming().id == produtoId &&
+                         incoming().keys().hasAll(['id', 'userId', 'nome', 'categoria', 'descricaoCurta', 'descricaoCompleta', 'preco', 'estoqueSimulado', 'unidade', 'ingredientes', 'beneficios', 'alergenicos', 'indicacaoUso', 'modoUso', 'composicao', 'porcaoReferencia', 'tabelaNutricional', 'restricoes', 'perguntasFrequentes', 'seloDestaque', 'statusDisponibilidade', 'createdAt', 'updatedAt']) &&
+                         incoming().keys().hasOnly(['id', 'userId', 'nome', 'categoria', 'descricaoCurta', 'descricaoCompleta', 'preco', 'estoqueSimulado', 'unidade', 'ingredientes', 'beneficios', 'alergenicos', 'indicacaoUso', 'modoUso', 'composicao', 'porcaoReferencia', 'tabelaNutricional', 'restricoes', 'perguntasFrequentes', 'seloDestaque', 'statusDisponibilidade', 'createdAt', 'updatedAt']) &&
+                         isValidProduto(incoming());
+
+        allow update: if isOwner(userId) &&
+                         isValidId(produtoId) &&
+                         isValidProduto(incoming()) &&
+                         incoming().id == existing().id &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['nome', 'categoria', 'descricaoCurta', 'descricaoCompleta', 'preco', 'estoqueSimulado', 'unidade', 'ingredientes', 'beneficios', 'alergenicos', 'indicacaoUso', 'modoUso', 'composicao', 'porcaoReferencia', 'tabelaNutricional', 'restricoes', 'perguntasFrequentes', 'seloDestaque', 'statusDisponibilidade', 'updatedAt']);
+
+        allow delete: if isOwner(userId) && isValidId(produtoId) && existing().userId == request.auth.uid;
+      }
+
+      match /clientes/{clienteId} {
+        allow get: if isOwner(userId) && isValidId(clienteId) && (resource == null || existing().userId == request.auth.uid);
+        allow list: if isOwner(userId) && existing().userId == request.auth.uid;
+
+        allow create: if isOwner(userId) &&
+                         isValidId(clienteId) &&
+                         incoming().id == clienteId &&
+                         incoming().keys().hasAll(['id', 'userId', 'nomeCompleto', 'telefone', 'email', 'cidadeLocalizacao', 'preferenciasAlimentares', 'objetivos', 'restricoes', 'alergias', 'observacoes', 'dataCadastro', 'historicoInteracoes', 'createdAt', 'updatedAt']) &&
+                         incoming().keys().hasOnly(['id', 'userId', 'nomeCompleto', 'telefone', 'email', 'cidadeLocalizacao', 'preferenciasAlimentares', 'objetivos', 'restricoes', 'alergias', 'observacoes', 'dataCadastro', 'historicoInteracoes', 'createdAt', 'updatedAt']) &&
+                         isValidCliente(incoming());
+
+        allow update: if isOwner(userId) &&
+                         isValidId(clienteId) &&
+                         isValidCliente(incoming()) &&
+                         incoming().id == existing().id &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['nomeCompleto', 'telefone', 'email', 'cidadeLocalizacao', 'preferenciasAlimentares', 'objetivos', 'restricoes', 'alergias', 'observacoes', 'dataCadastro', 'historicoInteracoes', 'updatedAt']);
+
+        allow delete: if isOwner(userId) && isValidId(clienteId) && existing().userId == request.auth.uid;
+      }
+
+      match /pedidos/{pedidoId} {
+        allow get: if isOwner(userId) && isValidId(pedidoId) && (resource == null || existing().userId == request.auth.uid);
+        allow list: if isOwner(userId) && existing().userId == request.auth.uid;
+
+        allow create: if isOwner(userId) &&
+                         isValidId(pedidoId) &&
+                         incoming().id == pedidoId &&
+                         incoming().keys().hasAll(['id', 'userId', 'codigoPedido', 'clienteId', 'nomeCliente', 'itens', 'subtotal', 'desconto', 'total', 'status', 'metodoPagamento', 'dataCriacao', 'observacoes', 'createdAt', 'updatedAt']) &&
+                         incoming().keys().hasOnly(['id', 'userId', 'codigoPedido', 'clienteId', 'nomeCliente', 'itens', 'subtotal', 'desconto', 'total', 'status', 'metodoPagamento', 'dataCriacao', 'observacoes', 'createdAt', 'updatedAt']) &&
+                         isValidPedido(incoming());
+
+        allow update: if isOwner(userId) &&
+                         isValidId(pedidoId) &&
+                         isValidPedido(incoming()) &&
+                         incoming().id == existing().id &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['status', 'observacoes', 'updatedAt']);
+
+        allow delete: if isOwner(userId) && isValidId(pedidoId) && existing().userId == request.auth.uid;
+      }
+
+      match /planos/{planoId} {
+        allow get: if isOwner(userId) && isValidId(planoId) && (resource == null || existing().userId == request.auth.uid);
+        allow list: if isOwner(userId) && existing().userId == request.auth.uid;
+
+        allow create: if isOwner(userId) &&
+                         isValidId(planoId) &&
+                         incoming().id == planoId &&
+                         incoming().keys().hasAll(['id', 'userId', 'clienteId', 'nomeCliente', 'titulo', 'objetivoPrincipal', 'caloriasDiarias', 'proteinasGramas', 'carboidratosGramas', 'gordurasGramas', 'refeicoes', 'suplementosSugeridos', 'orientacoesGerais', 'dataCriacao', 'ativo', 'createdAt', 'updatedAt']) &&
+                         incoming().keys().hasOnly(['id', 'userId', 'clienteId', 'nomeCliente', 'titulo', 'objetivoPrincipal', 'caloriasDiarias', 'proteinasGramas', 'carboidratosGramas', 'gordurasGramas', 'refeicoes', 'suplementosSugeridos', 'orientacoesGerais', 'dataCriacao', 'ativo', 'createdAt', 'updatedAt']) &&
+                         isValidPlano(incoming());
+
+        allow update: if isOwner(userId) &&
+                         isValidId(planoId) &&
+                         isValidPlano(incoming()) &&
+                         incoming().id == existing().id &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['clienteId', 'nomeCliente', 'titulo', 'objetivoPrincipal', 'caloriasDiarias', 'proteinasGramas', 'carboidratosGramas', 'gordurasGramas', 'refeicoes', 'suplementosSugeridos', 'orientacoesGerais', 'ativo', 'updatedAt']);
+
+        allow delete: if isOwner(userId) && isValidId(planoId) && existing().userId == request.auth.uid;
+      }
+    }
+  }
+}

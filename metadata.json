@@ -1,0 +1,6 @@
+{
+  "name": "Vegan Flow",
+  "description": "Plataforma SaaS completa para gestão de vendas de suplementos veganos, CRM de atendimento ao cliente e criação de planos alimentares personalizados.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
