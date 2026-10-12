@@ -265,7 +265,7 @@ fun TelaAutenticacaoGoogle(
                         Icon(Icons.Filled.AccountCircle, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = if (modoCriarNovoUsuario) "Criar Novo Usuário com Google" else "Entrar com Google (Sign in with Google)",
+                            text = if (modoCriarNovoUsuario) "Criar Novo Usuário com Google" else "Entrar com o Google",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold
                         )

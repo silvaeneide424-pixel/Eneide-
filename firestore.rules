@@ -39,10 +39,10 @@ service cloud.firestore {
 
     function isValidUserProfile(data) {
       return data.userId is string && data.userId == request.auth.uid &&
-             data.nome is string && data.nome.size() >= 2 && data.nome.size() <= 120 &&
+             data.nome is string && data.nome.size() >= 1 && data.nome.size() <= 160 &&
              data.email is string && data.email.size() >= 3 && data.email.size() <= 180 &&
-             data.cargo is string && data.cargo.size() >= 2 && data.cargo.size() <= 120 &&
-             data.crnOuRegistro is string && data.crnOuRegistro.size() >= 1 && data.crnOuRegistro.size() <= 60 &&
+             data.cargo is string && data.cargo.size() >= 1 && data.cargo.size() <= 160 &&
+             data.crnOuRegistro is string && data.crnOuRegistro.size() >= 1 && data.crnOuRegistro.size() <= 80 &&
              isValidTimestamp(data.createdAt) &&
              isValidTimestamp(data.updatedAt);
     }
@@ -50,10 +50,10 @@ service cloud.firestore {
     function isValidProduto(data) {
       return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
              data.userId is string && data.userId == request.auth.uid &&
-             data.nome is string && data.nome.size() >= 2 && data.nome.size() <= 160 &&
-             data.categoria is string && data.categoria.size() >= 2 && data.categoria.size() <= 80 &&
-             data.descricaoCurta is string && data.descricaoCurta.size() >= 2 && data.descricaoCurta.size() <= 500 &&
-             data.descricaoCompleta is string && data.descricaoCompleta.size() >= 2 && data.descricaoCompleta.size() <= 2000 &&
+             data.nome is string && data.nome.size() >= 1 && data.nome.size() <= 160 &&
+             data.categoria is string && data.categoria.size() >= 1 && data.categoria.size() <= 80 &&
+             data.descricaoCurta is string && data.descricaoCurta.size() >= 1 && data.descricaoCurta.size() <= 500 &&
+             data.descricaoCompleta is string && data.descricaoCompleta.size() >= 1 && data.descricaoCompleta.size() <= 2000 &&
              (data.preco is int || data.preco is float) && data.preco >= 0 && data.preco <= 100000 &&
              data.estoqueSimulado is int && data.estoqueSimulado >= 0 && data.estoqueSimulado <= 100000 &&
              data.unidade is string && data.unidade.size() >= 1 && data.unidade.size() <= 80 &&
@@ -76,10 +76,10 @@ service cloud.firestore {
     function isValidCliente(data) {
       return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
              data.userId is string && data.userId == request.auth.uid &&
-             data.nomeCompleto is string && data.nomeCompleto.size() >= 2 && data.nomeCompleto.size() <= 160 &&
-             data.telefone is string && data.telefone.size() >= 6 && data.telefone.size() <= 40 &&
+             data.nomeCompleto is string && data.nomeCompleto.size() >= 1 && data.nomeCompleto.size() <= 160 &&
+             data.telefone is string && data.telefone.size() >= 1 && data.telefone.size() <= 40 &&
              data.email is string && data.email.size() >= 3 && data.email.size() <= 180 &&
-             data.cidadeLocalizacao is string && data.cidadeLocalizacao.size() >= 2 && data.cidadeLocalizacao.size() <= 120 &&
+             data.cidadeLocalizacao is string && data.cidadeLocalizacao.size() >= 1 && data.cidadeLocalizacao.size() <= 120 &&
              isValidStringList(data.preferenciasAlimentares, 20) &&
              isValidStringList(data.objetivos, 20) &&
              isValidStringList(data.restricoes, 20) &&
@@ -94,15 +94,15 @@ service cloud.firestore {
     function isValidPedido(data) {
       return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
              data.userId is string && data.userId == request.auth.uid &&
-             data.codigoPedido is string && data.codigoPedido.size() >= 2 && data.codigoPedido.size() <= 60 &&
+             data.codigoPedido is string && data.codigoPedido.size() >= 1 && data.codigoPedido.size() <= 60 &&
              data.clienteId is string && data.clienteId.size() >= 1 && data.clienteId.size() <= 128 &&
-             data.nomeCliente is string && data.nomeCliente.size() >= 2 && data.nomeCliente.size() <= 160 &&
+             data.nomeCliente is string && data.nomeCliente.size() >= 1 && data.nomeCliente.size() <= 160 &&
              isValidMapList(data.itens, 30) && data.itens.size() >= 1 &&
              (data.subtotal is int || data.subtotal is float) && data.subtotal >= 0 &&
              (data.desconto is int || data.desconto is float) && data.desconto >= 0 &&
              (data.total is int || data.total is float) && data.total >= 0 &&
-             data.status is string && data.status.size() >= 2 && data.status.size() <= 60 &&
-             data.metodoPagamento is string && data.metodoPagamento.size() >= 2 && data.metodoPagamento.size() <= 80 &&
+             data.status is string && data.status.size() >= 1 && data.status.size() <= 60 &&
+             data.metodoPagamento is string && data.metodoPagamento.size() >= 1 && data.metodoPagamento.size() <= 80 &&
              data.dataCriacao is string && data.dataCriacao.size() <= 40 &&
              data.observacoes is string && data.observacoes.size() <= 1000 &&
              isValidTimestamp(data.createdAt) &&
@@ -113,9 +113,9 @@ service cloud.firestore {
       return data.id is string && data.id.size() >= 1 && data.id.size() <= 128 &&
              data.userId is string && data.userId == request.auth.uid &&
              data.clienteId is string && data.clienteId.size() >= 1 && data.clienteId.size() <= 128 &&
-             data.nomeCliente is string && data.nomeCliente.size() >= 2 && data.nomeCliente.size() <= 160 &&
-             data.titulo is string && data.titulo.size() >= 2 && data.titulo.size() <= 160 &&
-             data.objetivoPrincipal is string && data.objetivoPrincipal.size() >= 2 && data.objetivoPrincipal.size() <= 300 &&
+             data.nomeCliente is string && data.nomeCliente.size() >= 1 && data.nomeCliente.size() <= 160 &&
+             data.titulo is string && data.titulo.size() >= 1 && data.titulo.size() <= 160 &&
+             data.objetivoPrincipal is string && data.objetivoPrincipal.size() >= 1 && data.objetivoPrincipal.size() <= 300 &&
              data.caloriasDiarias is int && data.caloriasDiarias >= 0 && data.caloriasDiarias <= 15000 &&
              data.proteinasGramas is int && data.proteinasGramas >= 0 && data.proteinasGramas <= 1000 &&
              data.carboidratosGramas is int && data.carboidratosGramas >= 0 && data.carboidratosGramas <= 2000 &&
@@ -143,8 +143,7 @@ service cloud.firestore {
                        isValidId(userId) &&
                        isValidUserProfile(incoming()) &&
                        incoming().userId == existing().userId &&
-                       incoming().createdAt == existing().createdAt &&
-                       incoming().diff(existing()).affectedKeys().hasOnly(['nome', 'email', 'cargo', 'crnOuRegistro', 'updatedAt']);
+                       incoming().diff(existing()).affectedKeys().hasOnly(['nome', 'email', 'cargo', 'crnOuRegistro', 'createdAt', 'updatedAt']);
 
       allow delete: if isOwner(userId) && isValidId(userId);
 
@@ -164,8 +163,7 @@ service cloud.firestore {
                          isValidProduto(incoming()) &&
                          incoming().id == existing().id &&
                          incoming().userId == existing().userId &&
-                         incoming().createdAt == existing().createdAt &&
-                         incoming().diff(existing()).affectedKeys().hasOnly(['nome', 'categoria', 'descricaoCurta', 'descricaoCompleta', 'preco', 'estoqueSimulado', 'unidade', 'ingredientes', 'beneficios', 'alergenicos', 'indicacaoUso', 'modoUso', 'composicao', 'porcaoReferencia', 'tabelaNutricional', 'restricoes', 'perguntasFrequentes', 'seloDestaque', 'statusDisponibilidade', 'updatedAt']);
+                         incoming().diff(existing()).affectedKeys().hasOnly(['nome', 'categoria', 'descricaoCurta', 'descricaoCompleta', 'preco', 'estoqueSimulado', 'unidade', 'ingredientes', 'beneficios', 'alergenicos', 'indicacaoUso', 'modoUso', 'composicao', 'porcaoReferencia', 'tabelaNutricional', 'restricoes', 'perguntasFrequentes', 'seloDestaque', 'statusDisponibilidade', 'createdAt', 'updatedAt']);
 
         allow delete: if isOwner(userId) && isValidId(produtoId) && existing().userId == request.auth.uid;
       }
@@ -186,8 +184,7 @@ service cloud.firestore {
                          isValidCliente(incoming()) &&
                          incoming().id == existing().id &&
                          incoming().userId == existing().userId &&
-                         incoming().createdAt == existing().createdAt &&
-                         incoming().diff(existing()).affectedKeys().hasOnly(['nomeCompleto', 'telefone', 'email', 'cidadeLocalizacao', 'preferenciasAlimentares', 'objetivos', 'restricoes', 'alergias', 'observacoes', 'dataCadastro', 'historicoInteracoes', 'updatedAt']);
+                         incoming().diff(existing()).affectedKeys().hasOnly(['nomeCompleto', 'telefone', 'email', 'cidadeLocalizacao', 'preferenciasAlimentares', 'objetivos', 'restricoes', 'alergias', 'observacoes', 'dataCadastro', 'historicoInteracoes', 'createdAt', 'updatedAt']);
 
         allow delete: if isOwner(userId) && isValidId(clienteId) && existing().userId == request.auth.uid;
       }
@@ -208,8 +205,7 @@ service cloud.firestore {
                          isValidPedido(incoming()) &&
                          incoming().id == existing().id &&
                          incoming().userId == existing().userId &&
-                         incoming().createdAt == existing().createdAt &&
-                         incoming().diff(existing()).affectedKeys().hasOnly(['status', 'observacoes', 'updatedAt']);
+                         incoming().diff(existing()).affectedKeys().hasOnly(['codigoPedido', 'clienteId', 'nomeCliente', 'itens', 'subtotal', 'desconto', 'total', 'status', 'metodoPagamento', 'dataCriacao', 'observacoes', 'createdAt', 'updatedAt']);
 
         allow delete: if isOwner(userId) && isValidId(pedidoId) && existing().userId == request.auth.uid;
       }
@@ -230,8 +226,7 @@ service cloud.firestore {
                          isValidPlano(incoming()) &&
                          incoming().id == existing().id &&
                          incoming().userId == existing().userId &&
-                         incoming().createdAt == existing().createdAt &&
-                         incoming().diff(existing()).affectedKeys().hasOnly(['clienteId', 'nomeCliente', 'titulo', 'objetivoPrincipal', 'caloriasDiarias', 'proteinasGramas', 'carboidratosGramas', 'gordurasGramas', 'refeicoes', 'suplementosSugeridos', 'orientacoesGerais', 'ativo', 'updatedAt']);
+                         incoming().diff(existing()).affectedKeys().hasOnly(['clienteId', 'nomeCliente', 'titulo', 'objetivoPrincipal', 'caloriasDiarias', 'proteinasGramas', 'carboidratosGramas', 'gordurasGramas', 'refeicoes', 'suplementosSugeridos', 'orientacoesGerais', 'dataCriacao', 'ativo', 'createdAt', 'updatedAt']);
 
         allow delete: if isOwner(userId) && isValidId(planoId) && existing().userId == request.auth.uid;
       }
